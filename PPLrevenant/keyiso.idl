@@ -1,0 +1,141 @@
+[
+    uuid(b25a52bf-e5dd-4f4a-aea6-8ca7272a0e86),
+        version(2.0),
+]
+interface keyiso
+{
+    // https://learn.microsoft.com/en-us/windows/win32/api/ncrypt/ns-ncrypt-ncryptkeyname
+    typedef struct _NCryptKeyName
+    {
+        [unique] [string] wchar_t* pszName;
+        [unique] [string] wchar_t* pszAlgid;
+        long     dwLegacyKeySpec;
+        long     dwFlags;
+    } _NCryptKeyName;
+
+    long s_SrvRpcCreateContext(
+        [in] handle_t hBinding,
+        [out][context_handle] void** hContext
+    );
+
+    long s_SrvRpcReleaseContext(
+        [in]handle_t hBinding,
+        [in][out][context_handle] void** hContext
+    );
+
+    // https://learn.microsoft.com/en-us/windows/win32/api/ncrypt/nf-ncrypt-ncryptopenstorageprovider
+    long s_SrvRpcCryptOpenStorageProvider(
+        [in]handle_t hBinding,
+        [in][context_handle] void* hContext,
+        [out]hyper* hProvider,
+        [in][string] const wchar_t* pszProviderName,
+        [in]long dwFlags
+    );
+
+    long s_SrvRpcCryptIsAlgSupported(); // Not used
+
+    long s_SrvRpcCryptEnumAlgorithms(); // Not used
+
+    // https://learn.microsoft.com/en-us/windows/win32/api/ncrypt/nf-ncrypt-ncryptenumkeys
+    long s_SrvRpcCryptEnumKeys(
+        [in]handle_t hBinding,
+        [in][context_handle] void* hContext,
+        [in]hyper hProvider,
+        [in][unique][string] wchar_t* pszScope,
+        [out][ref]struct _NCryptKeyName** ppKeyName,
+        [in][out]hyper* ppEnumState,
+        [in]long dwFlags
+    );
+
+    long s_SrvRpcCryptFreeBuffer(
+        [in]handle_t hBinding,
+        [in][context_handle]void* hContext,
+        [in]hyper hBuffer
+    );
+
+    long s_SrvRpcCryptFreeProvider(
+        [in]handle_t hBinding,
+        [in][context_handle]void* hContext,
+        [in]hyper hProvider
+    );
+
+    long s_SrvRpcCryptFreeKey(
+        [in]handle_t hBinding,
+        [in][context_handle]void* hContext,
+        [in]hyper hProvider,
+        [in]hyper hKey
+    );
+
+    long s_SrvRpcCryptOpenKey(); // Not used
+
+    // https://learn.microsoft.com/en-us/windows/win32/api/ncrypt/nf-ncrypt-ncryptcreatepersistedkey
+    long s_SrvRpcCryptCreatePersistedKey(
+        [in]handle_t hBinding,
+        [in][context_handle]void* hContext,
+        [in]hyper hProvider,
+        [out]hyper* phKey,
+        [in][string]const wchar_t* pszAlgId,
+        [in][unique][string]const wchar_t* pszKeyName,
+        [in]long dwLegacyKeySpec,
+        [in]long dwFlags
+    );
+
+    long s_SrvRpcCryptGetProviderProperty(
+        [in]handle_t hBinding,
+        [in][context_handle]void* hContext,
+        [in]hyper hProvider,
+        [in][string]const wchar_t* pszPropertyName,
+        [in][out][unique][size_is(cbBuffer)]byte* pBuffer,
+        [in]long cbBuffer,
+        [out]long* pcbWritten,
+        [in]long dwFlags
+    );
+
+    long s_SrvRpcCryptSetProviderProperty(
+        [in]handle_t hBinding,
+        [in][context_handle]void* hContext,
+        [in]hyper hProvider,
+        [in][string]const wchar_t* pszPropertyName,
+        [in][size_is(cbBuffer)]byte* pBuffer,
+        [in]long cbBuffer,
+        [in]long dwFlags
+    );
+
+    long s_SrvRpcCryptGetKeyProperty(); // Not used
+
+    long s_SrvRpcCryptSetKeyProperty(); // Not used
+
+    long s_SrvRpcCryptFinalizeKey(); // Not used
+
+    long s_SrvRpcCryptEncrypt(); // Not used
+
+    long s_SrvRpcCryptDecrypt(); // Not used
+
+    long s_SrvRpcCryptImportKey(); // Not used
+
+    long s_SrvRpcCryptExportKey(); // Not used
+
+    long s_SrvRpcCryptSignHash(); // Not used
+
+    long s_SrvRpcCryptVerifySignature(); // Not used
+
+    long s_SrvRpcCryptDeleteKey(); // Not used
+
+    long s_SrvRpcCryptNotifyChangeKey(); // Not used
+
+    long s_SrvRpcCryptSecretAgreement(); // Not used
+
+    long s_SrvRpcCryptDeriveKey(); // Not used
+
+    long s_SrvRpcCryptFreeSecret(); // Not used
+
+    long s_SrvRpcCryptCipherEncrypt(); // Not used
+
+    long s_SrvRpcCryptCipherDecrypt(); // Not used
+
+    long s_SrvRpcCryptKeyDerivation(); // Not used
+
+    long s_SrvRpcCryptCreateClaim(); // Not used
+
+    long s_SrvRpcCryptVerifyClaim(); // Not used
+}
